@@ -34,8 +34,8 @@ namespace myNotepad
             this.btnFind = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.direction = new System.Windows.Forms.GroupBox();
-            this.ridBtnDown = new System.Windows.Forms.RadioButton();
             this.ridBtnUp = new System.Windows.Forms.RadioButton();
+            this.ridBtnDown = new System.Windows.Forms.RadioButton();
             this.checkCase = new System.Windows.Forms.CheckBox();
             this.checkWarp = new System.Windows.Forms.CheckBox();
             this.btnFindNext = new System.Windows.Forms.Button();
@@ -90,17 +90,6 @@ namespace myNotepad
             this.direction.TabStop = false;
             this.direction.Text = "direction";
             // 
-            // ridBtnDown
-            // 
-            this.ridBtnDown.AutoSize = true;
-            this.ridBtnDown.Location = new System.Drawing.Point(45, 19);
-            this.ridBtnDown.Name = "ridBtnDown";
-            this.ridBtnDown.Size = new System.Drawing.Size(53, 17);
-            this.ridBtnDown.TabIndex = 0;
-            this.ridBtnDown.TabStop = true;
-            this.ridBtnDown.Text = "Down";
-            this.ridBtnDown.UseVisualStyleBackColor = true;
-            // 
             // ridBtnUp
             // 
             this.ridBtnUp.AutoSize = true;
@@ -112,6 +101,17 @@ namespace myNotepad
             this.ridBtnUp.TabStop = true;
             this.ridBtnUp.Text = "Up";
             this.ridBtnUp.UseVisualStyleBackColor = true;
+            // 
+            // ridBtnDown
+            // 
+            this.ridBtnDown.AutoSize = true;
+            this.ridBtnDown.Location = new System.Drawing.Point(45, 19);
+            this.ridBtnDown.Name = "ridBtnDown";
+            this.ridBtnDown.Size = new System.Drawing.Size(53, 17);
+            this.ridBtnDown.TabIndex = 0;
+            this.ridBtnDown.TabStop = true;
+            this.ridBtnDown.Text = "Down";
+            this.ridBtnDown.UseVisualStyleBackColor = true;
             // 
             // checkCase
             // 
@@ -174,14 +174,14 @@ namespace myNotepad
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnFind;
-        private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.GroupBox direction;
-        private System.Windows.Forms.RadioButton ridBtnUp;
-        private System.Windows.Forms.RadioButton ridBtnDown;
-        private System.Windows.Forms.CheckBox checkCase;
-        private System.Windows.Forms.CheckBox checkWarp;
         private System.Windows.Forms.Button btnFindNext;
+        public System.Windows.Forms.Button btnCancel;
+        protected internal System.Windows.Forms.GroupBox direction;
+        protected internal System.Windows.Forms.CheckBox checkCase;
+        protected internal System.Windows.Forms.CheckBox checkWarp;
+        protected internal System.Windows.Forms.TextBox txtSearch;
+        protected internal System.Windows.Forms.RadioButton ridBtnUp;
+        protected internal System.Windows.Forms.RadioButton ridBtnDown;
     }
 }

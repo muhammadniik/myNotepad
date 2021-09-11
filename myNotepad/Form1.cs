@@ -92,7 +92,7 @@ namespace myNotepad
 
             Application.Exit();
         }
-
+        
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             string backgroundName = txtShow.BackColor.Name;
@@ -174,6 +174,9 @@ namespace myNotepad
 
             searchToolStripMenuItem1.Enabled = isEnable;
             selectAllToolStripMenuItem.Enabled = isEnable;
+
+
+
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -224,14 +227,14 @@ namespace myNotepad
             findForm.Show(this);
         }
 
-        public bool find(string textSearch, StringComparison typcase , bool rithToLeft = true)
+        public bool find(string textSearch, StringComparison typcase, bool rithToLeft = true)
         {
             string txtBox = txtShow.Text;
             int i;
             if (rithToLeft)
                 i = txtBox.IndexOf(textSearch, 0, typcase);
             else
-                i = txtBox.LastIndexOf(textSearch,txtShow.Text.Length, typcase);
+                i = txtBox.LastIndexOf(textSearch, txtShow.Text.Length, typcase);
 
             if (i == -1)
             {
@@ -257,10 +260,10 @@ namespace myNotepad
             {
                 int exam = txtShow.SelectionStart;
                 i = txtBox.IndexOf(textSearch, exam + txtShow.SelectionLength, typcase);
-                if(warpAround)
+                if (warpAround)
                 {
-                    if(i == -1)
-                        i = txtBox.IndexOf(textSearch,0, typcase);
+                    if (i == -1)
+                        i = txtBox.IndexOf(textSearch, 0, typcase);
                 }
 
 
@@ -268,9 +271,9 @@ namespace myNotepad
             else
             {
                 int exam = txtShow.SelectionStart;
-                
-                    i = txtBox.LastIndexOf(textSearch, exam, typcase);
-               
+
+                i = txtBox.LastIndexOf(textSearch, exam, typcase);
+
                 if (warpAround)
                 {
                     if (i == -1)
@@ -295,5 +298,120 @@ namespace myNotepad
             }
 
         }
+        undoVaRedo undoredo = new undoVaRedo();
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtShow.Text = undoredo.undo();
+        }
+
+        private void txtShow_KeyUp(object sender, KeyEventArgs e)
+        {
+
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+           
+          
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            txtShow.Text = undoredo.redo();
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            undoredo.setText(txtShow.Text);
+        }
+
+        private void replaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Repleac replac = new Repleac(this);
+            replac.Show(this);
+        }
+
+
+
+
+
+        public bool replace(string textReplac)
+        {
+            if (txtShow.SelectedText.Length != 0)
+            {
+                txtShow.SelectedText = textReplac;
+                this.Focus();
+                return true;
+            }
+            else
+                return false;
+              
+           
+        }
+        public bool replaceAll(string text, bool findNext)
+        { 
+            while (findNext)
+            {
+                
+                txtShow.SelectedText = text;
+                return true;
+            }
+            return false;
+        }
     }
+
+
+
+
+
+
+    // nex class...................................................
+    public class undoVaRedo
+    {
+        List<string> texts = new List<string>();
+        int i;
+        int nowInt;
+        public undoVaRedo()
+        {
+            i = 0;
+            nowInt = i;
+        }
+
+        public void setText(string textnew)
+        {
+            if (i <= 100)
+            {
+                texts.Add ( textnew);
+                nowInt = i;
+                ++i;
+            }
+            else
+            {
+                texts.Remove(texts[0]);
+                texts.Add( textnew);
+                i = 101;
+            }
+
+        }
+        public string undo()
+        {
+            if (nowInt > 0)
+                return texts[--nowInt];
+            return null;
+
+
+        }
+
+        public string redo()
+        {
+            if (i > nowInt +1)
+                return texts[++nowInt];
+            return null;
+
+
+
+        }
+    }
+
+   
 }

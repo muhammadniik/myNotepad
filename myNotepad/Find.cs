@@ -19,6 +19,11 @@ namespace myNotepad
             form1 = frm;
             InitializeComponent();
         }
+        public Find()
+        {
+            
+            InitializeComponent();
+        }
 
         private void Find_Load(object sender, EventArgs e)
         {
