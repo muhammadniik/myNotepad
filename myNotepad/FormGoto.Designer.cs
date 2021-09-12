@@ -42,6 +42,7 @@ namespace myNotepad
             this.txtGoto.Size = new System.Drawing.Size(216, 20);
             this.txtGoto.TabIndex = 0;
             this.txtGoto.TextChanged += new System.EventHandler(this.txtGoto_TextChanged);
+            this.txtGoto.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtGoto_KeyPress);
             // 
             // label1
             // 
@@ -84,6 +85,7 @@ namespace myNotepad
             this.Name = "FormGoto";
             this.ShowIcon = false;
             this.Text = "Go To Line";
+            this.Load += new System.EventHandler(this.FormGoto_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

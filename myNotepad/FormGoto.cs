@@ -35,5 +35,23 @@ namespace myNotepad
             if (i)
                 this.Close();
         }
+
+        private void FormGoto_Load(object sender, EventArgs e)
+        {
+            txtGoto.Text = frm1.returnallLines().ToString();
+            txtGoto.SelectAll();
+        }
+
+        private void txtGoto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar >= '0' && e.KeyChar <= '9' || e.KeyChar =='\b')
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

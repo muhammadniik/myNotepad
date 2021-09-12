@@ -378,6 +378,10 @@ namespace myNotepad
             return false;
         }
 
+        public int returnallLines()
+        {
+           return txtShow.Lines.Length;
+        }
         public Boolean gotometod(int numberline)
         {
             if (numberline > txtShow.Lines.Length || numberline < 0)
@@ -429,7 +433,7 @@ namespace myNotepad
         private void printToolStripMenuItem_Click(object sender, EventArgs e)
         {
             DialogResult dg = new DialogResult();
-            
+            printDialog1.Document = printDocument1;
             dg = printDialog1.ShowDialog();
             if (dg == DialogResult.OK)
                 printDocument1.Print();
