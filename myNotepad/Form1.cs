@@ -12,7 +12,7 @@ namespace myNotepad
 {
     public partial class Form1 : Form
     {
-        Boolean isSaved = true;
+        Boolean isSaved;
         string fileN = "";
         public Form1()
         {
@@ -92,13 +92,25 @@ namespace myNotepad
 
             Application.Exit();
         }
-        
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            string backgroundName = txtShow.BackColor.Name;
-            string forColorName = (Convert.ToInt32(txtShow.ForeColor.ToArgb())).ToString();
+            //string backgroundName = txtShow.BackColor.Name;
+            //string forColorName = (Convert.ToInt32(txtShow.ForeColor.ToArgb())).ToString();
 
-            System.IO.File.WriteAllText("all.txt", backgroundName + " " + forColorName + " ");
+            // System.IO.File.WriteAllText("all.txt", backgroundName + " " + forColorName + " ");
+            string[] infosave = new string[7];
+            infosave[0] = txtShow.Font.Name;
+            infosave[1] = txtShow.Font.Size.ToString();
+            infosave[2] = txtShow.BackColor.Name;
+            infosave[3] = txtShow.ForeColor.ToArgb().ToString();
+            infosave[4] = this.Size.Height.ToString();
+            infosave[5] = this.Size.Width.ToString();
+
+
+            System.IO.File.WriteAllLines("all.txt", infosave);
+
+
             if (isSaved == false)
             {
                 DialogResult dr = MessageBox.Show("you want save this file", "saveing", MessageBoxButtons.YesNo);
@@ -114,12 +126,17 @@ namespace myNotepad
         {
             if (System.IO.File.Exists("all.txt"))
             {
-                string[] allText = System.IO.File.ReadAllText("all.txt").Split(' ');
 
+                string[] allText = System.IO.File.ReadAllLines("all.txt");
 
+                txtShow.Font = new Font(allText[0], float.Parse(allText[1],System.Globalization.CultureInfo.InvariantCulture));
+                txtShow.BackColor = Color.FromName(allText[2]);
+                txtShow.ForeColor = Color.FromArgb(Convert.ToInt32(allText[3]));
+                this.Height = Convert.ToInt32(allText[4]);
+                this.Width = Convert.ToInt32(allText[5]);
                 //setbackcolor...........................
                 ToolStripMenuItem temp = new ToolStripMenuItem();
-                temp.Text = allText[0];
+                temp.Text = allText[2];
                 backColor(temp, null);
                 //setforcolor......................
 
@@ -127,6 +144,7 @@ namespace myNotepad
 
             }
             txtShow_TextChanged(null, null);
+            isSaved = true;
 
         }
 
@@ -189,6 +207,7 @@ namespace myNotepad
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            newToolStripMenuItem_Click(null, null);
             openFileDialog1.Filter = "all txt|*.txt|all file|*.*";
             openFileDialog1.FileName = "";
             if (openFileDialog1.ShowDialog() != DialogResult.Cancel)
@@ -311,8 +330,8 @@ namespace myNotepad
 
         private void Form1_KeyUp(object sender, KeyEventArgs e)
         {
-           
-          
+
+
         }
 
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -345,18 +364,86 @@ namespace myNotepad
             }
             else
                 return false;
-              
-           
+
+
         }
         public bool replaceAll(string text, bool findNext)
-        { 
+        {
             while (findNext)
             {
-                
+
                 txtShow.SelectedText = text;
                 return true;
             }
             return false;
+        }
+
+        public Boolean gotometod(int numberline)
+        {
+            if (numberline > txtShow.Lines.Length || numberline < 0)
+            {
+                MessageBox.Show("this line out of range...");
+                return false;
+            }
+
+            else
+            {
+                txtShow.SelectionStart = txtShow.GetFirstCharIndexFromLine(numberline);
+                return true;
+            }
+        }
+
+        private void gotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormGoto frmgoto = new FormGoto(this);
+            frmgoto.ShowDialog();
+
+        }
+
+        private void txtShow_KeyUp_1(object sender, KeyEventArgs e)
+        {
+            int firstchar = txtShow.GetFirstCharIndexOfCurrentLine();
+            int ln = txtShow.GetLineFromCharIndex(firstchar) + 1;
+            int col = (txtShow.SelectionStart - firstchar);
+            toolStripStatusLine.Text = "Ln " + ln + ", Col " + col;
+        }
+
+        private void txtShow_Click(object sender, EventArgs e)
+        {
+            txtShow_KeyUp_1(null, null);
+        }
+
+        private void fileToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
+        {
+            saveToolStripMenuItem.Enabled = !isSaved;
+            bool lenttextshow = txtShow.Text.Length > 0;
+            cutToolStripMenuItem.Enabled = lenttextshow;
+            copyToolStripMenuItem.Enabled = lenttextshow;
+            pasteToolStripMenuItem.Enabled = Clipboard.ContainsText();
+            searchToolStripMenuItem1.Enabled = lenttextshow;
+            replaceToolStripMenuItem.Enabled = lenttextshow;
+            gotoToolStripMenuItem.Enabled = txtShow.Lines.Length > 1;
+            selectAllToolStripMenuItem.Enabled = lenttextshow;
+        }
+
+        private void printToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dg = new DialogResult();
+            
+            dg = printDialog1.ShowDialog();
+            if (dg == DialogResult.OK)
+                printDocument1.Print();
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+           e.Graphics.DrawString(txtShow.Text, txtShow.Font, Brushes.Black, 100, 100);
+        }
+
+        private void printPreviewToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            printPreviewDialog1.Document = printDocument1;
+            printPreviewDialog1.Show();
         }
     }
 
@@ -381,14 +468,14 @@ namespace myNotepad
         {
             if (i <= 100)
             {
-                texts.Add ( textnew);
+                texts.Add(textnew);
                 nowInt = i;
                 ++i;
             }
             else
             {
                 texts.Remove(texts[0]);
-                texts.Add( textnew);
+                texts.Add(textnew);
                 i = 101;
             }
 
@@ -404,14 +491,14 @@ namespace myNotepad
 
         public string redo()
         {
-            if (i > nowInt +1)
+            if (i > nowInt + 1)
                 return texts[++nowInt];
-            return null;
+            return texts[nowInt];
 
 
 
         }
     }
 
-   
+
 }
